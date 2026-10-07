@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Django
+*.log
+db.sqlite3
+staticfiles/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests / cache
+.pytest_cache/
+.mypy_cache/
+
+# User uploaded files
+media/
+
+# Temporary files
+*.tmp
+*.temp

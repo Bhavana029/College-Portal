@@ -1,0 +1,252 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            College Portal
+        {% endblock %}
+    </title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+    {% block extra_css %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <!-- ==============================
+         SIDEBAR
+    =============================== -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <h2>College Portal</h2>
+            <p>Management System</p>
+        </div>
+
+        <nav class="sidebar-menu">
+
+    {% if user.is_authenticated %}
+
+        <!-- ==============================
+             ADMIN
+        =============================== -->
+
+        {% if user.role == "ADMIN" or user.is_superuser %}
+
+            <a href="{% url 'admin-dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'admin-students' %}">
+                Students
+            </a>
+
+            <a href="{% url 'admin-faculty' %}">
+                Faculty
+            </a>
+
+            <a href="{% url 'admin-placement' %}">
+                Placement Cell
+            </a>
+
+    <a href="{% url 'admin-announcement-add' %}">
+    Add Announcement
+</a>
+
+<a href="{% url 'admin-holiday-manage' %}">
+    Add Holiday
+</a>
+
+
+        <!-- ==============================
+             FACULTY
+        =============================== -->
+
+        {% elif user.role == "FACULTY" %}
+
+            <a href="{% url 'faculty-dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'faculty-subjects' %}">
+                My Subjects
+            </a>
+
+            <a href="{% url 'faculty-attendance' %}">
+                Attendance
+            </a>
+
+            <a href="{% url 'faculty-marks' %}">
+                Marks
+            </a>
+
+           <a href="{% url 'user-announcements' %}">
+    Announcements
+</a>
+
+        <!-- ==============================
+             PLACEMENT CELL
+        =============================== -->
+
+        {% elif user.role == "PLACEMENT" %}
+
+            <a href="{% url 'placement-dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'placement-companies' %}">
+                Companies
+            </a>
+
+            <a href="{% url 'placement-drives' %}">
+                Placement Drives
+            </a>
+
+            <a href="{% url 'placement-applications' %}">
+    Applications
+</a>
+
+            <a href="{% url 'user-announcements' %}">
+    Announcements
+</a>
+
+
+        <!-- ==============================
+             STUDENT
+        =============================== -->
+
+        {% elif user.role == "STUDENT" %}
+
+            <a href="{% url 'student-dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'student-attendance' %}">
+    My Attendance
+</a>
+
+            <a href="{% url 'student-marks' %}">
+    My Marks
+</a>
+
+
+            <a href="{% url 'user-announcements' %}">
+    Announcements
+</a>
+
+            <a href="{% url 'student-placements' %}">
+    Placements
+</a>
+
+            <a href="{% url 'student-applications' %}">
+    My Applications
+</a>
+
+        {% endif %}
+
+    {% endif %}
+
+</nav>
+
+    </aside>
+
+
+    <!-- ==============================
+         MAIN AREA
+    =============================== -->
+
+    <div class="main-wrapper">
+
+        <!-- TOP NAVBAR -->
+        <header class="top-navbar">
+
+            <div class="navbar-left">
+                <h3>
+                    {% block page_heading %}
+                        Dashboard
+                    {% endblock %}
+                </h3>
+            </div>
+
+            <div class="navbar-right">
+
+    {% if user.is_authenticated %}
+
+        <div class="user-info">
+
+            <span class="user-name">
+                {{ user.get_full_name|default:user.username }}
+            </span>
+
+          <span class="user-role">
+
+    {% if user.is_superuser %}
+        ADMIN
+    {% else %}
+        {{ user.get_role_display }}
+    {% endif %}
+
+</span>
+
+        </div>
+
+        <div class="profile-circle">
+            {{ user.username|first|upper }}
+        </div>
+
+        <a href="{% url 'logout' %}" class="logout-btn">
+            Logout
+        </a>
+
+    {% endif %}
+
+</div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+
+        <main class="page-content">
+
+            {% if messages %}
+                <div class="messages">
+
+                    {% for message in messages %}
+
+                        <div class="message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            {% endif %}
+
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+
+    <!-- ==============================
+         JAVASCRIPT
+    =============================== -->
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+</html>

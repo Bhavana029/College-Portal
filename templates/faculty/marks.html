@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Marks
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Marks Management</h1>
+
+        <p>
+            Select year and semester to view students and marks.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     FILTER
+========================================= -->
+
+<div class="content-card">
+
+    <h2>Select Class</h2>
+
+    <form method="get">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="year">
+                    Year
+                </label>
+
+                <select
+                    id="year"
+                    name="year"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Year
+                    </option>
+
+                    {% for year in years %}
+
+                    <option
+                        value="{{ year }}"
+                        {% if selected_year == year|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        Year {{ year }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="semester">
+                    Semester
+                </label>
+
+                <select
+                    id="semester"
+                    name="semester"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Semester
+                    </option>
+
+                    {% for semester in semesters %}
+
+                    <option
+                        value="{{ semester }}"
+                        {% if selected_semester == semester|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        Semester {{ semester }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Load Students
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- =========================================
+     STUDENTS
+========================================= -->
+
+{% if selected_year and selected_semester %}
+
+    {% if student_data %}
+
+        <div class="content-card">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Year {{ selected_year }}
+                        -
+                        Semester {{ selected_semester }}
+                    </h2>
+
+                    <p>
+                        Student Marks
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>S.No</th>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Subjects / Marks</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in student_data %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+
+                            <td>
+                                {{ item.student.student_id }}
+                            </td>
+
+
+                            <td>
+                                {{ item.student.user.get_full_name|default:item.student.user.username }}
+                            </td>
+
+
+                            <td>
+
+                                {% if item.marks %}
+
+                                    {% for mark in item.marks %}
+
+                                    <div style="
+                                        margin-bottom: 7px;
+                                    ">
+
+                                        <strong>
+                                            {{ mark.subject.code }}
+                                        </strong>
+
+                                        -
+                                        {{ mark.subject.name }}
+
+                                        |
+
+                                        {{ mark.get_exam_name_display }}
+
+                                        |
+
+                                        <strong>
+                                            {{ mark.marks }}/{{ mark.max_marks }}
+                                        </strong>
+
+                                        <a
+                                            href="{% url 'faculty-mark-edit' mark.id %}"
+                                            class="btn btn-secondary"
+                                            style="
+                                                padding: 4px 8px;
+                                                margin-left: 6px;
+                                            "
+                                        >
+                                            Edit
+                                        </a>
+
+
+                                        <form
+                                            method="post"
+                                            action="{% url 'faculty-mark-delete' mark.id %}"
+                                            style="
+                                                display:inline;
+                                            "
+                                            onsubmit="
+                                                return confirm(
+                                                    'Delete these marks?'
+                                                );
+                                            "
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-danger"
+                                                style="
+                                                    padding: 4px 8px;
+                                                "
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    <span style="color:#94a3b8;">
+                                        No marks entered yet
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="{% url 'faculty-mark-add' item.student.id %}?year={{ selected_year }}&semester={{ selected_semester }}"
+                                    class="btn btn-primary"
+                                >
+                                    Enter Marks
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="content-card">
+
+            <div class="empty-state">
+
+                <h3>
+                    No Students Found
+                </h3>
+
+                <p>
+                    No students found for this year and semester.
+                </p>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

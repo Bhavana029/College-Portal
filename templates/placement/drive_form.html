@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Add Placement Drive
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Add Placement Drive</h1>
+
+        <p>
+            Enter company, job and eligibility details.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="content-card">
+
+    <form method="post">
+
+        {% csrf_token %}
+
+
+        <!-- =================================
+             BASIC JOB DETAILS
+        ================================== -->
+
+        <h2>Job Details</h2>
+
+        <div class="form-grid">
+
+
+            <!-- COMPANY -->
+
+            <div class="form-group">
+
+                <label for="company">
+                    Company
+                </label>
+
+                <select
+                    id="company"
+                    name="company"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Company
+                    </option>
+
+                    {% for company in companies %}
+
+                    <option value="{{ company.id }}">
+                        {{ company.company_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- JOB TITLE -->
+
+            <div class="form-group">
+
+                <label for="job_title">
+                    Job Title
+                </label>
+
+                <input
+                    type="text"
+                    id="job_title"
+                    name="job_title"
+                    class="form-control"
+                    placeholder="Example: Software Engineer"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PACKAGE -->
+
+            <div class="form-group">
+
+                <label for="package">
+                    Package (LPA)
+                </label>
+
+                <input
+                    type="number"
+                    id="package"
+                    name="package"
+                    class="form-control"
+                    min="0"
+                    step="0.01"
+                    placeholder="Example: 6.50"
+                    required
+                >
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="form-group">
+
+                <label for="location">
+                    Job Location
+                </label>
+
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    class="form-control"
+                    placeholder="Example: Bengaluru"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             ELIGIBILITY
+        ================================== -->
+
+        <h2 style="margin-top:30px;">
+            Eligibility
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <!-- MIN CGPA -->
+
+            <div class="form-group">
+
+                <label for="minimum_cgpa">
+                    Minimum CGPA
+                </label>
+
+                <input
+                    type="number"
+                    id="minimum_cgpa"
+                    name="minimum_cgpa"
+                    class="form-control"
+                    min="0"
+                    max="10"
+                    step="0.01"
+                    value="0"
+                    required
+                >
+
+            </div>
+
+
+            <!-- MAX BACKLOGS -->
+
+            <div class="form-group">
+
+                <label for="maximum_backlogs">
+                    Maximum Backlogs
+                </label>
+
+                <input
+                    type="number"
+                    id="maximum_backlogs"
+                    name="maximum_backlogs"
+                    class="form-control"
+                    min="0"
+                    value="0"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DEPARTMENTS -->
+
+            <div class="form-group">
+
+                <label for="allowed_departments">
+                    Allowed Departments
+                </label>
+
+                <input
+                    type="text"
+                    id="allowed_departments"
+                    name="allowed_departments"
+                    class="form-control"
+                    placeholder="Example: CSE,ECE,EEE"
+                    required
+                >
+
+                <small style="
+                    display:block;
+                    margin-top:6px;
+                    color:#64748b;
+                    font-size:12px;
+                ">
+                    Enter department codes separated by commas.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             APPLICATION DETAILS
+        ================================== -->
+
+        <h2 style="margin-top:30px;">
+            Application Details
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <!-- DEADLINE -->
+
+            <div class="form-group">
+
+                <label for="application_deadline">
+                    Application Deadline
+                </label>
+
+                <input
+                    type="date"
+                    id="application_deadline"
+                    name="application_deadline"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DRIVE DATE -->
+
+            <div class="form-group">
+
+                <label for="drive_date">
+                    Drive Date
+                </label>
+
+                <input
+                    type="date"
+                    id="drive_date"
+                    name="drive_date"
+                    class="form-control"
+                >
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="form-group">
+
+                <label for="status">
+                    Status
+                </label>
+
+                <select
+                    id="status"
+                    name="status"
+                    class="form-control"
+                    required
+                >
+
+                    {% for value, label in status_choices %}
+
+                    <option value="{{ value }}">
+
+                        {{ label }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             JOB DESCRIPTION
+        ================================== -->
+
+        <h2 style="margin-top:30px;">
+            Job Description
+        </h2>
+
+
+        <div class="form-group">
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                class="form-control"
+                placeholder="Enter job responsibilities, required skills, eligibility information, etc."
+                required
+            ></textarea>
+
+        </div>
+
+
+        <!-- =================================
+             BUTTONS
+        ================================== -->
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+            margin-top:25px;
+        ">
+
+            <a
+                href="{% url 'placement-drives' %}"
+                class="btn btn-light"
+            >
+                Cancel
+            </a>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Add Placement Drive
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

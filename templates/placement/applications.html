@@ -1,0 +1,514 @@
+{% extends "base.html" %}
+
+{% block title %}
+Applications
+{% endblock %}
+
+{% block page_heading %}
+Applications
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .applications-page {
+        width: 100%;
+        max-width: 1350px;
+        margin: 0 auto;
+    }
+
+    .applications-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .applications-header h1 {
+        margin: 0;
+        font-size: 28px;
+        color: #0f172a;
+    }
+
+    .applications-header p {
+        margin-top: 6px;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .applications-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .applications-card-header {
+        margin-bottom: 20px;
+    }
+
+    .applications-card-header h2 {
+        margin: 0;
+        font-size: 19px;
+        color: #0f172a;
+    }
+
+    .applications-card-header p {
+        margin-top: 5px;
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    .applications-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .applications-table {
+        width: 100%;
+        min-width: 1150px;
+        border-collapse: collapse;
+    }
+
+    .applications-table th {
+        padding: 13px 14px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .applications-table td {
+        padding: 14px;
+        border-bottom: 1px solid #edf1f5;
+        color: #334155;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .applications-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .student-name {
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .student-id {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 3px;
+    }
+
+    .company-name {
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .job-title {
+        color: #475569;
+        font-weight: 600;
+    }
+
+    .resume-link {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .resume-link:hover {
+        text-decoration: underline;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-applied {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .status-shortlisted {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-test {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-interview {
+        background: #ede9fe;
+        color: #6d28d9;
+    }
+
+    .status-selected {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .status-rejected {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-withdrawn {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .status-form {
+        margin: 0;
+    }
+
+    .status-select {
+        min-width: 145px;
+        height: 38px;
+        padding: 0 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        background: #ffffff;
+        color: #334155;
+        font-size: 12px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .status-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    .empty-applications {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-applications-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+
+    .empty-applications h3 {
+        margin: 0 0 6px;
+        color: #334155;
+        font-size: 18px;
+    }
+
+    .empty-applications p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+        .applications-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+</style>
+
+
+<div class="applications-page">
+
+    <!-- HEADER -->
+
+    <div class="applications-header">
+
+        <div>
+
+            <h1>
+                Placement Applications
+            </h1>
+
+            <p>
+                Review student applications and update application status.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- APPLICATIONS CARD -->
+
+    <div class="applications-card">
+
+        <div class="applications-card-header">
+
+            <h2>
+                Student Applications
+            </h2>
+
+            <p>
+                Track applicants for all placement drives.
+            </p>
+
+        </div>
+
+
+        {% if applications %}
+
+        <div class="applications-table-wrapper">
+
+            <table class="applications-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>Student</th>
+                        <th>Department</th>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Package</th>
+                        <th>Applied Date</th>
+                        <th>Resume</th>
+                        <th>Status</th>
+                        <th>Update Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for application in applications %}
+
+                    <tr>
+
+                        <!-- NUMBER -->
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+
+                        <!-- STUDENT -->
+
+                        <td>
+
+                            <div class="student-name">
+                                {{ application.student.user.get_full_name }}
+                            </div>
+
+                            <div class="student-id">
+                                {{ application.student.student_id }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <td>
+                            {{ application.student.department.name }}
+                        </td>
+
+
+                        <!-- COMPANY -->
+
+                        <td>
+
+                            <div class="company-name">
+                                {{ application.placement_drive.company.company_name }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- JOB -->
+
+                        <td>
+
+                            <div class="job-title">
+                                {{ application.placement_drive.job_title }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- PACKAGE -->
+
+                        <td>
+                            ₹ {{ application.placement_drive.package }} LPA
+                        </td>
+
+
+                        <!-- APPLIED DATE -->
+
+                        <td>
+                            {{ application.application_date|date:"d M Y" }}
+                        </td>
+
+
+                        <!-- RESUME -->
+
+                        <td>
+
+                            {% if application.resume %}
+
+                                <a
+                                    href="{{ application.resume.url }}"
+                                    target="_blank"
+                                    class="resume-link"
+                                >
+                                    View Resume
+                                </a>
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- CURRENT STATUS -->
+
+                        <td>
+
+                            {% if application.status == "APPLIED" %}
+
+                                <span class="status-badge status-applied">
+                                    Applied
+                                </span>
+
+                            {% elif application.status == "SHORTLISTED" %}
+
+                                <span class="status-badge status-shortlisted">
+                                    Shortlisted
+                                </span>
+
+                            {% elif application.status == "TEST" %}
+
+                                <span class="status-badge status-test">
+                                    Test
+                                </span>
+
+                            {% elif application.status == "INTERVIEW" %}
+
+                                <span class="status-badge status-interview">
+                                    Interview
+                                </span>
+
+                            {% elif application.status == "SELECTED" %}
+
+                                <span class="status-badge status-selected">
+                                    Selected
+                                </span>
+
+                            {% elif application.status == "REJECTED" %}
+
+                                <span class="status-badge status-rejected">
+                                    Rejected
+                                </span>
+
+                            {% elif application.status == "WITHDRAWN" %}
+
+                                <span class="status-badge status-withdrawn">
+                                    Withdrawn
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-badge status-applied">
+                                    {{ application.get_status_display }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- UPDATE STATUS -->
+
+                        <td>
+
+                            <form
+                                method="POST"
+                                action="{% url 'placement-application-status-update' application.id %}"
+                                class="status-form"
+                            >
+
+                                {% csrf_token %}
+
+                                <select
+                                    name="status"
+                                    class="status-select"
+                                    onchange="this.form.submit()"
+                                >
+
+                                    {% for value, label in status_choices %}
+
+                                        <option
+                                            value="{{ value }}"
+                                            {% if application.status == value %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            {{ label }}
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-applications">
+
+            <div class="empty-applications-icon">
+                📄
+            </div>
+
+            <h3>
+                No Applications Yet
+            </h3>
+
+            <p>
+                No students have applied for any placement drive yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

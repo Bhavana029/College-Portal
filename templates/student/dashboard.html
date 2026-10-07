@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Student Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>
+            Student Dashboard
+        </h1>
+
+        <p>
+            Welcome,
+            {{ request.user.get_full_name|default:request.user.username }}
+            👋
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     STATISTICS
+========================================= -->
+
+<div class="dashboard-grid">
+
+
+    <!-- My Subjects -->
+
+    <div class="dashboard-card">
+
+        <h4>
+            My Subjects
+        </h4>
+
+        <div class="card-value">
+            {{ total_subjects }}
+        </div>
+
+        <div class="card-description">
+            Subjects for your current year
+        </div>
+
+    </div>
+
+
+    <!-- Attendance -->
+
+    <div class="dashboard-card">
+
+        <h4>
+            Attendance
+        </h4>
+
+        <div class="card-value">
+            {{ attendance_percentage }}%
+        </div>
+
+        <div class="card-description">
+            {{ present_attendance }}
+            present out of
+            {{ total_attendance }}
+        </div>
+
+    </div>
+
+
+    <!-- Marks -->
+
+    <div class="dashboard-card">
+
+        <h4>
+            Marks Records
+        </h4>
+
+        <div class="card-value">
+            {{ total_marks }}
+        </div>
+
+        <div class="card-description">
+            Marks available
+        </div>
+
+    </div>
+
+
+    <!-- Placements -->
+
+    <div class="dashboard-card">
+
+        <h4>
+            Open Placements
+        </h4>
+
+        <div class="card-value">
+            {{ total_open_placements }}
+        </div>
+
+        <div class="card-description">
+            Placement opportunities
+        </div>
+
+    </div>
+
+
+    <!-- Applications -->
+
+    <div class="dashboard-card">
+
+        <h4>
+            My Applications
+        </h4>
+
+        <div class="card-value">
+            {{ total_applications }}
+        </div>
+
+        <div class="card-description">
+            Placement applications
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     STUDENT INFORMATION
+========================================= -->
+
+<div class="content-card">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>
+                Student Information
+            </h2>
+
+            <p>
+                Your student profile
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <tbody>
+
+
+                <!-- Student ID -->
+
+                <tr>
+
+                    <th>
+                        Student ID
+                    </th>
+
+                    <td>
+                        {{ student.student_id }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Name -->
+
+                <tr>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <td>
+                        {{ student.user.get_full_name|default:student.user.username }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Username -->
+
+                <tr>
+
+                    <th>
+                        Username
+                    </th>
+
+                    <td>
+                        {{ student.user.username }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Email -->
+
+                <tr>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <td>
+                        {{ student.user.email|default:"Not specified" }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Phone -->
+
+                <tr>
+
+                    <th>
+                        Phone
+                    </th>
+
+                    <td>
+                        {{ student.user.phone|default:"Not specified" }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Department -->
+
+                <tr>
+
+                    <th>
+                        Department
+                    </th>
+
+                    <td>
+                        {{ student.department.name }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Department Code -->
+
+                <tr>
+
+                    <th>
+                        Department Code
+                    </th>
+
+                    <td>
+                        {{ student.department.code }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Year -->
+
+                <tr>
+
+                    <th>
+                        Year
+                    </th>
+
+                    <td>
+                        Year {{ student.year }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Section -->
+
+                <tr>
+
+                    <th>
+                        Section
+                    </th>
+
+                    <td>
+                        {{ student.section|default:"Not specified" }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Batch -->
+
+                <tr>
+
+                    <th>
+                        Batch
+                    </th>
+
+                    <td>
+                        {{ student.batch|default:"Not specified" }}
+                    </td>
+
+                </tr>
+
+
+                <!-- CGPA -->
+
+                <tr>
+
+                    <th>
+                        CGPA
+                    </th>
+
+                    <td>
+
+                        {% if student.cgpa %}
+                            {{ student.cgpa }}
+                        {% else %}
+                            Not updated
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

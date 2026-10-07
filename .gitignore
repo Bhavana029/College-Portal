@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+
+venv/
+.venv/
+
+__pycache__/
+*.pyc
+
+staticfiles/
+media/
+
+*.log
+
+.vscode/
+.idea/

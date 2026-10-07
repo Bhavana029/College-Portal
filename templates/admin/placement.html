@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Placement Cell
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Placement Cell</h1>
+
+        <p>
+            Manage placement officers and placement activities.
+        </p>
+
+    </div>
+
+    <div>
+
+        <a
+            href="{% url 'admin-placement-add' %}"
+            class="btn btn-primary"
+        >
+            + Add Placement Officer
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     PLACEMENT OFFICERS
+========================================= -->
+
+<div class="content-card">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>Placement Officers</h2>
+
+            <p>
+                Placement cell user accounts
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Password Status</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for officer in placement_users %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+
+                    <td>
+                        {{ officer.get_full_name|default:officer.username }}
+                    </td>
+
+
+                    <td>
+                        {{ officer.username }}
+                    </td>
+
+
+                    <td>
+                        {{ officer.email|default:"-" }}
+                    </td>
+
+
+                    <td>
+                        {{ officer.phone|default:"-" }}
+                    </td>
+
+
+                    <td>
+
+                        {% if officer.has_usable_password %}
+
+                            <span class="status-badge status-present">
+                                Set
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge status-pending">
+                                Not Set
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        style="text-align:center;"
+                    >
+                        No placement officers found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     COMPANIES
+========================================= -->
+
+<div class="content-card">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>Companies</h2>
+
+            <p>
+                Companies registered for placements
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+                    <th>S.No</th>
+                    <th>Company</th>
+                    <th>Industry</th>
+                    <th>HR Name</th>
+                    <th>HR Email</th>
+                    <th>Phone</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for company in companies %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ company.company_name }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ company.industry|default:"-" }}
+                    </td>
+
+                    <td>
+                        {{ company.hr_name|default:"-" }}
+                    </td>
+
+                    <td>
+                        {{ company.hr_email|default:"-" }}
+                    </td>
+
+                    <td>
+                        {{ company.hr_phone|default:"-" }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        style="text-align:center;"
+                    >
+                        No companies found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     PLACEMENT DRIVES
+========================================= -->
+
+<div class="content-card">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>Placement Drives</h2>
+
+            <p>
+                Recent placement opportunities
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+                    <th>S.No</th>
+                    <th>Company</th>
+                    <th>Job Title</th>
+                    <th>Package</th>
+                    <th>Location</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for drive in drives %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td>
+                        {{ drive.company.company_name }}
+                    </td>
+
+                    <td>
+                        {{ drive.job_title }}
+                    </td>
+
+                    <td>
+                        ₹ {{ drive.package }} LPA
+                    </td>
+
+                    <td>
+                        {{ drive.location }}
+                    </td>
+
+                    <td>
+                        {{ drive.application_deadline }}
+                    </td>
+
+                    <td>
+
+                        {% if drive.status == "OPEN" %}
+
+                            <span class="status-badge status-open">
+                                Open
+                            </span>
+
+                        {% elif drive.status == "CLOSED" %}
+
+                            <span class="status-badge status-closed">
+                                Closed
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge status-pending">
+                                Draft
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        style="text-align:center;"
+                    >
+                        No placement drives found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

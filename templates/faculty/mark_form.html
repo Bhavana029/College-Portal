@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+
+    {% if mark %}
+        Edit Marks
+    {% else %}
+        Enter Marks
+    {% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>
+
+            {% if mark %}
+                Edit Marks
+            {% else %}
+                Enter Marks
+            {% endif %}
+
+        </h1>
+
+        <p>
+            Enter or update marks for the selected student.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     STUDENT INFORMATION
+========================================= -->
+
+<div class="content-card">
+
+    <h2>Student Information</h2>
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <tr>
+                <th>Student ID</th>
+                <td>{{ student.student_id }}</td>
+            </tr>
+
+            <tr>
+                <th>Student Name</th>
+                <td>
+                    {{ student.user.get_full_name|default:student.user.username }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Department</th>
+                <td>
+                    {{ student.department.name }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Year</th>
+                <td>
+                    {{ student.year }}
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     MARK FORM
+========================================= -->
+
+<div class="content-card">
+
+    <h2>
+
+        {% if mark %}
+            Update Marks
+        {% else %}
+            Enter Student Marks
+        {% endif %}
+
+    </h2>
+
+
+    <form method="post">
+
+        {% csrf_token %}
+
+
+        <div class="form-grid">
+
+
+            <!-- SUBJECT -->
+
+            <div class="form-group">
+
+                <label for="subject">
+                    Subject
+                </label>
+
+                <select
+                    id="subject"
+                    name="subject"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Subject
+                    </option>
+
+                    {% for subject in subjects %}
+
+                    <option
+                        value="{{ subject.id }}"
+
+                        {% if mark and mark.subject.id == subject.id %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ subject.code }} - {{ subject.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- EXAM TYPE -->
+
+            <div class="form-group">
+
+                <label for="exam_name">
+                    Exam Type
+                </label>
+
+                <select
+                    id="exam_name"
+                    name="exam_name"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Exam Type
+                    </option>
+
+                    {% for value, label in exam_choices %}
+
+                    <option
+                        value="{{ value }}"
+
+                        {% if mark and mark.exam_name == value %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ label }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- MARKS -->
+
+            <div class="form-group">
+
+                <label for="marks">
+                    Marks
+                </label>
+
+                <input
+                    type="number"
+                    id="marks"
+                    name="marks"
+                    class="form-control"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    placeholder="Enter marks out of 100"
+                    value="{{ mark.marks|default:'' }}"
+                    required
+                >
+
+                <small style="
+                    color: #64748b;
+                    font-size: 12px;
+                ">
+                    Enter marks between 0 and 100.
+                </small>
+
+            </div>
+
+
+            <!-- MAXIMUM MARKS -->
+
+            <div class="form-group">
+
+                <label for="max_marks">
+                    Maximum Marks
+                </label>
+
+                <input
+                    type="text"
+                    id="max_marks"
+                    class="form-control"
+                    value="100"
+                    readonly
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             BUTTONS
+        ================================= -->
+
+        <div style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        ">
+
+
+            {% if mark %}
+
+                <a
+                    href="{% url 'faculty-marks' %}?year={{ student.year }}&semester={{ mark.subject.semester }}"
+                    class="btn btn-light"
+                >
+                    Cancel
+                </a>
+
+            {% else %}
+
+                <a
+                    href="{% url 'faculty-marks' %}?year={{ student.year }}&semester={{ selected_semester }}"
+                    class="btn btn-light"
+                >
+                    Cancel
+                </a>
+
+            {% endif %}
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+
+                {% if mark %}
+                    Update Marks
+                {% else %}
+                    Save Marks
+                {% endif %}
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Placement Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Placement Dashboard</h1>
+
+        <p>
+            Manage companies, placement drives and student applications.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     STATISTICS
+========================================= -->
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+
+        <h4>Total Companies</h4>
+
+        <div class="card-value">
+            {{ total_companies }}
+        </div>
+
+        <div class="card-description">
+            Registered companies
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h4>Total Drives</h4>
+
+        <div class="card-value">
+            {{ total_drives }}
+        </div>
+
+        <div class="card-description">
+            Placement drives
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h4>Open Drives</h4>
+
+        <div class="card-value">
+            {{ open_drives }}
+        </div>
+
+        <div class="card-description">
+            Currently open
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h4>Total Applications</h4>
+
+        <div class="card-value">
+            {{ total_applications }}
+        </div>
+
+        <div class="card-description">
+            Student applications
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h4>Selected Students</h4>
+
+        <div class="card-value">
+            {{ selected_students }}
+        </div>
+
+        <div class="card-description">
+            Students selected
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h4>Active Applications</h4>
+
+        <div class="card-value">
+            {{ active_applications }}
+        </div>
+
+        <div class="card-description">
+            Applications in progress
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     PLACEMENT OFFICER INFORMATION
+========================================= -->
+
+<div class="content-card">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>Placement Cell</h2>
+
+            <p>
+                Logged-in placement officer
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <tbody>
+
+                <tr>
+
+                    <th>
+                        Username
+                    </th>
+
+                    <td>
+                        {{ request.user.username }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <td>
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <td>
+                        {{ request.user.email|default:"Not specified" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Role
+                    </th>
+
+                    <td>
+                        Placement Cell
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

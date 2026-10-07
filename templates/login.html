@@ -1,0 +1,144 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - College Portal</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <div class="login-container">
+
+        <div class="login-card">
+
+            <!-- ==============================
+                 LOGO / TITLE
+            =============================== -->
+
+            <div class="login-logo">
+
+                <h1>College Portal</h1>
+
+                <p>
+                    Student & Placement Management System
+                </p>
+
+            </div>
+
+
+            <!-- ==============================
+                 MESSAGES
+            =============================== -->
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="alert
+                        {% if message.tags == 'error' %}
+                            alert-error
+                        {% else %}
+                            alert-success
+                        {% endif %}
+                    ">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            <!-- ==============================
+                 LOGIN FORM
+            =============================== -->
+
+<form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-control"
+                        placeholder="Enter username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="width: 100%;"
+                >
+                    Login
+                </button>
+
+            </form>
+
+
+            <!-- ==============================
+                 LOGIN INFORMATION
+            =============================== -->
+
+            <div style="
+                margin-top: 20px;
+                text-align: center;
+                font-size: 12px;
+                color: #64748b;
+            ">
+
+                <p>
+                    Admin, Faculty, Placement Cell and Student
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>

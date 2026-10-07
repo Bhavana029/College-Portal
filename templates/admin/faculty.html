@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Faculty
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1>Faculty</h1>
+
+        <p>
+            Manage college faculty accounts.
+        </p>
+    </div>
+
+    <div>
+
+        <a
+            href="{% url 'admin-faculty-add' %}"
+            class="btn btn-primary"
+        >
+            + Add Faculty
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="content-card">
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+                    <th>S.No</th>
+                    <th>Faculty ID</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Password Status</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for faculty in faculty_members %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ faculty.faculty_id }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ faculty.user.get_full_name|default:faculty.user.username }}
+                    </td>
+
+                    <td>
+                        {{ faculty.user.username }}
+                    </td>
+
+                    <td>
+                        {{ faculty.user.email|default:"-" }}
+                    </td>
+
+                    <td>
+                        {{ faculty.department.code }}
+                    </td>
+
+                    <td>
+                        {{ faculty.designation|default:"-" }}
+                    </td>
+
+                    <td>
+
+                        {% if faculty.user.has_usable_password %}
+
+                            <span class="status-badge status-present">
+                                Set
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge status-pending">
+                                Not Set
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        style="text-align:center;"
+                    >
+                        No faculty members found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    {{ page_title }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1>{{ page_title }}</h1>
+
+        <p>
+            Add or update your subject details.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="content-card">
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <!-- Subject Name -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Subject Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-control"
+                    placeholder="Enter subject name"
+                    value="{{ subject.name|default:'' }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Subject Code -->
+
+            <div class="form-group">
+
+                <label for="code">
+                    Subject Code
+                </label>
+
+                <input
+                    type="text"
+                    id="code"
+                    name="code"
+                    class="form-control"
+                    placeholder="Example: CS301"
+                    value="{{ subject.code|default:'' }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Year -->
+
+            <div class="form-group">
+
+                <label for="year">
+                    Year
+                </label>
+
+                <select
+                    id="year"
+                    name="year"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Year
+                    </option>
+
+                    <option
+                        value="1"
+                        {% if subject.year == 1 %}selected{% endif %}
+                    >
+                        Year 1
+                    </option>
+
+                    <option
+                        value="2"
+                        {% if subject.year == 2 %}selected{% endif %}
+                    >
+                        Year 2
+                    </option>
+
+                    <option
+                        value="3"
+                        {% if subject.year == 3 %}selected{% endif %}
+                    >
+                        Year 3
+                    </option>
+
+                    <option
+                        value="4"
+                        {% if subject.year == 4 %}selected{% endif %}
+                    >
+                        Year 4
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Semester -->
+
+            <div class="form-group">
+
+                <label for="semester">
+                    Semester
+                </label>
+
+                <select
+                    id="semester"
+                    name="semester"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Semester
+                    </option>
+
+                    <option
+                        value="1"
+                        {% if subject.semester == 1 %}selected{% endif %}
+                    >
+                        Semester 1
+                    </option>
+
+                    <option
+                        value="2"
+                        {% if subject.semester == 2 %}selected{% endif %}
+                    >
+                        Semester 2
+                    </option>
+
+                    <option
+                        value="3"
+                        {% if subject.semester == 3 %}selected{% endif %}
+                    >
+                        Semester 3
+                    </option>
+
+                    <option
+                        value="4"
+                        {% if subject.semester == 4 %}selected{% endif %}
+                    >
+                        Semester 4
+                    </option>
+
+                    <option
+                        value="5"
+                        {% if subject.semester == 5 %}selected{% endif %}
+                    >
+                        Semester 5
+                    </option>
+
+                    <option
+                        value="6"
+                        {% if subject.semester == 6 %}selected{% endif %}
+                    >
+                        Semester 6
+                    </option>
+
+                    <option
+                        value="7"
+                        {% if subject.semester == 7 %}selected{% endif %}
+                    >
+                        Semester 7
+                    </option>
+
+                    <option
+                        value="8"
+                        {% if subject.semester == 8 %}selected{% endif %}
+                    >
+                        Semester 8
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- Department -->
+
+        <div class="form-group">
+
+            <label for="department">
+                Department
+            </label>
+
+            <input
+                type="text"
+                id="department"
+                class="form-control"
+                value="{{ faculty.department.name }} ({{ faculty.department.code }})"
+                readonly
+            >
+
+        </div>
+
+
+        <!-- Faculty -->
+
+        <div class="form-group">
+
+            <label for="faculty">
+                Faculty
+            </label>
+
+            <input
+                type="text"
+                id="faculty"
+                class="form-control"
+                value="{{ faculty.user.get_full_name|default:faculty.user.username }}"
+                readonly
+            >
+
+        </div>
+
+
+        <!-- Buttons -->
+
+        <div style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        ">
+
+            <a
+                href="{% url 'faculty-subjects' %}"
+                class="btn btn-light"
+            >
+                Cancel
+            </a>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                {{ button_text }}
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,598 @@
+{% extends "base.html" %}
+
+{% block title %}Placement Drives{% endblock %}
+
+{% block page_heading %}
+Placement Drives
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .drive-page {
+        width: 100%;
+    }
+
+    .drive-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        gap: 20px;
+    }
+
+    .drive-header h1 {
+        margin: 0;
+        font-size: 28px;
+        color: #0f172a;
+    }
+
+    .drive-header p {
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .drive-summary {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+    .drive-summary-box {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .drive-summary-box p {
+        margin: 0 0 8px;
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    .drive-summary-box h3 {
+        margin: 0;
+        font-size: 26px;
+        color: #0f172a;
+    }
+
+    .drive-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .drive-card-header {
+        margin-bottom: 20px;
+    }
+
+    .drive-card-header h2 {
+        margin: 0;
+        font-size: 19px;
+        color: #0f172a;
+    }
+
+    .drive-card-header p {
+        margin-top: 5px;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .drive-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .drive-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1250px;
+    }
+
+    .drive-table th {
+        padding: 13px 14px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+        color: #475569;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .drive-table td {
+        padding: 14px;
+        border-bottom: 1px solid #edf1f5;
+        color: #334155;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .drive-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .company-text {
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .job-title {
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .package-text {
+        font-weight: 700;
+        color: #2563eb;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-open {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-closed {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .status-draft {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .action-group {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+    }
+
+    .action-group form {
+        margin: 0;
+    }
+
+    .edit-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 11px;
+        border-radius: 6px;
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .edit-btn:hover {
+        background: #dbeafe;
+    }
+
+    .delete-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 11px;
+        border-radius: 6px;
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .delete-btn:hover {
+        background: #fee2e2;
+    }
+
+    .empty-drive {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-drive-icon {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #eff6ff;
+        font-size: 25px;
+    }
+
+    .empty-drive h3 {
+        margin: 0;
+        color: #334155;
+        font-size: 18px;
+    }
+
+    .empty-drive p {
+        margin: 8px 0 20px;
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    @media (max-width: 1000px) {
+
+        .drive-summary {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .drive-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+    }
+
+    @media (max-width: 600px) {
+
+        .drive-summary {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+</style>
+
+
+<div class="drive-page">
+
+
+    <!-- HEADER -->
+
+    <div class="drive-header">
+
+        <div>
+
+            <h1>
+                Placement Drives
+            </h1>
+
+            <p>
+                Manage job openings and campus placement opportunities.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'placement-drive-add' %}"
+            class="btn btn-primary"
+        >
+            + Add Placement Drive
+        </a>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="drive-summary">
+
+        <div class="drive-summary-box">
+
+            <p>
+                Total Drives
+            </p>
+
+            <h3>
+                {{ drives|length }}
+            </h3>
+
+        </div>
+
+
+        <div class="drive-summary-box">
+
+            <p>
+                Open Drives
+            </p>
+
+            <h3>
+                {{ drives|length }}
+            </h3>
+
+        </div>
+
+
+        <div class="drive-summary-box">
+
+            <p>
+                Companies
+            </p>
+
+            <h3>
+                {{ drives|length }}
+            </h3>
+
+        </div>
+
+
+        <div class="drive-summary-box">
+
+            <p>
+                Placement Cell
+            </p>
+
+            <h3>
+                Active
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <!-- DRIVE TABLE -->
+
+    <div class="drive-card">
+
+        <div class="drive-card-header">
+
+            <h2>
+                Placement Drive List
+            </h2>
+
+            <p>
+                All placement opportunities created by the Placement Cell.
+            </p>
+
+        </div>
+
+
+        {% if drives %}
+
+        <div class="drive-table-wrapper">
+
+            <table class="drive-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Company</th>
+
+                        <th>Job Title</th>
+
+                        <th>Package</th>
+
+                        <th>Location</th>
+
+                        <th>Min CGPA</th>
+
+                        <th>Max Backlogs</th>
+
+                        <th>Deadline</th>
+
+                        <th>Drive Date</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for drive in drives %}
+
+                    <tr>
+
+                        <!-- Number -->
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+
+                        <!-- Company -->
+
+                        <td>
+
+                            <div class="company-text">
+                                {{ drive.company.company_name }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- Job -->
+
+                        <td>
+
+                            <div class="job-title">
+                                {{ drive.job_title }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- Package -->
+
+                        <td>
+
+                            <span class="package-text">
+                                ₹ {{ drive.package }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Location -->
+
+                        <td>
+                            {{ drive.location }}
+                        </td>
+
+
+                        <!-- CGPA -->
+
+                        <td>
+                            {{ drive.minimum_cgpa }}
+                        </td>
+
+
+                        <!-- Backlogs -->
+
+                        <td>
+                            {{ drive.maximum_backlogs }}
+                        </td>
+
+
+                        <!-- Deadline -->
+
+                        <td>
+                            {{ drive.application_deadline|date:"d M Y" }}
+                        </td>
+
+
+                        <!-- Drive Date -->
+
+                        <td>
+
+                            {% if drive.drive_date %}
+
+                                {{ drive.drive_date|date:"d M Y" }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Status -->
+
+                        <td>
+
+                            {% if drive.status == "OPEN" %}
+
+                                <span class="status-pill status-open">
+                                    Open
+                                </span>
+
+                            {% elif drive.status == "CLOSED" %}
+
+                                <span class="status-pill status-closed">
+                                    Closed
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-pill status-draft">
+                                    Draft
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Actions -->
+
+                        <td>
+
+                            <div class="action-group">
+
+                                <a
+                                    href="{% url 'placement-drive-edit' drive.id %}"
+                                    class="edit-btn"
+                                >
+                                    Edit
+                                </a>
+
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'placement-drive-delete' drive.id %}"
+                                    onsubmit="return confirm('Are you sure you want to delete this placement drive?');"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="delete-btn"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-drive">
+
+            <div class="empty-drive-icon">
+                💼
+            </div>
+
+            <h3>
+                No Placement Drives
+            </h3>
+
+            <p>
+                Create your first placement drive to get started.
+            </p>
+
+            <a
+                href="{% url 'placement-drive-add' %}"
+                class="btn btn-primary"
+            >
+                + Create Placement Drive
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

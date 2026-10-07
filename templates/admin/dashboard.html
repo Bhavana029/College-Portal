@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block page_heading %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1>Welcome, Admin 👋</h1>
+
+        <p>
+            Manage students, faculty, holidays, announcements
+            and placements.
+        </p>
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     STATISTICS
+====================================================== -->
+
+<div class="dashboard-grid">
+
+    <!-- Students -->
+
+    <div class="dashboard-card">
+
+        <h4>Total Students</h4>
+
+        <div class="card-value">
+            {{ total_students }}
+        </div>
+
+        <div class="card-description">
+            Registered students
+        </div>
+
+    </div>
+
+
+    <!-- Faculty -->
+
+    <div class="dashboard-card">
+
+        <h4>Total Faculty</h4>
+
+        <div class="card-value">
+            {{ total_faculty }}
+        </div>
+
+        <div class="card-description">
+            Faculty members
+        </div>
+
+    </div>
+
+
+    <!-- Placement Drives -->
+
+    <div class="dashboard-card">
+
+        <h4>Placement Drives</h4>
+
+        <div class="card-value">
+            {{ total_placements }}
+        </div>
+
+        <div class="card-description">
+            Placement opportunities
+        </div>
+
+    </div>
+
+
+    <!-- Applications -->
+
+    <div class="dashboard-card">
+
+        <h4>Total Applications</h4>
+
+        <div class="card-value">
+            {{ total_applications }}
+        </div>
+
+        <div class="card-description">
+            Student applications
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SECOND ROW
+====================================================== -->
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+
+        <h4>Announcements</h4>
+
+        <div class="card-value">
+            {{ total_announcements }}
+        </div>
+
+        <div class="card-description">
+            Published announcements
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h4>Holidays</h4>
+
+        <div class="card-value">
+            {{ total_holidays }}
+        </div>
+
+        <div class="card-description">
+            College holidays
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- =====================================================
+     RECENT PLACEMENTS
+====================================================== -->
+
+<div class="content-card">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Recent Placement Drives</h2>
+
+            <p>
+                Latest placement opportunities added
+                by the placement cell.
+            </p>
+        </div>
+
+    </div>
+
+
+    {% if recent_placements %}
+
+        <div class="table-container">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Company</th>
+
+                        <th>Job Title</th>
+
+                        <th>Package</th>
+
+                        <th>Location</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for placement in recent_placements %}
+
+                        <tr>
+
+                            <td>
+                                {{ placement.company.company_name }}
+                            </td>
+
+                            <td>
+                                {{ placement.job_title }}
+                            </td>
+
+                            <td>
+                                ₹ {{ placement.package }} LPA
+                            </td>
+
+                            <td>
+                                {{ placement.location }}
+                            </td>
+
+                            <td>
+
+                                <span class="
+                                    status-badge
+                                    {% if placement.status == 'OPEN' %}
+                                        status-open
+                                    {% elif placement.status == 'CLOSED' %}
+                                        status-closed
+                                    {% else %}
+                                        status-pending
+                                    {% endif %}
+                                ">
+
+                                    {{ placement.status }}
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <h3>No Placement Drives</h3>
+
+            <p>
+                No placement drives have been added yet.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =====================================================
+     RECENT ANNOUNCEMENTS
+====================================================== -->
+
+<div class="content-card">
+
+    <h2>Recent Announcements</h2>
+
+    {% if recent_announcements %}
+
+        <div class="table-container">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Title</th>
+
+                        <th>Audience</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for announcement in recent_announcements %}
+
+                        <tr>
+
+                            <td>
+                                {{ announcement.title }}
+                            </td>
+
+                            <td>
+                                {{ announcement.audience }}
+                            </td>
+
+                            <td>
+                                {{ announcement.created_at|date:"d M Y" }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <h3>No Announcements</h3>
+
+            <p>
+                No announcements have been published yet.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

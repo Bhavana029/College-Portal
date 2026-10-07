@@ -1,0 +1,555 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Attendance
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Attendance Management</h1>
+
+        <p>
+            Select year, semester, subject and date
+            to manage attendance.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =================================
+     FILTER SECTION
+================================= -->
+
+<div class="content-card">
+
+    <h2>Attendance Selection</h2>
+
+    <form method="get">
+
+        <div class="form-grid">
+
+
+            <!-- YEAR -->
+
+            <div class="form-group">
+
+                <label for="year">
+                    Year
+                </label>
+
+                <select
+                    name="year"
+                    id="year"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Year
+                    </option>
+
+                    {% for year in years %}
+
+                    <option
+                        value="{{ year }}"
+                        {% if selected_year == year|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+
+                        Year {{ year }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- SEMESTER -->
+
+            <div class="form-group">
+
+                <label for="semester">
+                    Semester
+                </label>
+
+                <select
+                    name="semester"
+                    id="semester"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Semester
+                    </option>
+
+                    {% for semester in semesters %}
+
+                    <option
+                        value="{{ semester }}"
+                        {% if selected_semester == semester|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+
+                        Semester {{ semester }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- SUBJECT -->
+
+            <div class="form-group">
+
+                <label for="subject">
+                    Subject
+                </label>
+
+                <select
+                    name="subject"
+                    id="subject"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select Subject
+                    </option>
+
+                    {% for subject in subjects %}
+
+                    <option
+                        value="{{ subject.id }}"
+                        {% if selected_subject_id == subject.id|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ subject.code }}
+                        -
+                        {{ subject.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label for="date">
+                    Attendance Date
+                </label>
+
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    class="form-control"
+                    value="{{ selected_date }}"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+
+            Load Students
+
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- =================================
+     STUDENT ATTENDANCE
+================================= -->
+
+{% if selected_subject %}
+
+
+<div class="content-card">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>
+                {{ selected_subject.code }}
+                -
+                {{ selected_subject.name }}
+            </h2>
+
+            <p>
+
+                Year {{ selected_subject.year }}
+                |
+                Semester {{ selected_subject.semester }}
+                |
+                Date: {{ selected_date }}
+
+            </p>
+
+        </div>
+
+
+        {% if attendance_saved and not edit_mode %}
+
+            <span class="status-badge status-present">
+                Attendance Saved
+            </span>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =================================
+         READ-ONLY MODE
+    ================================= -->
+
+    {% if attendance_saved and not edit_mode %}
+
+
+        <div class="table-container">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Student ID</th>
+
+                        <th>Student Name</th>
+
+                        <th>Department</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for row in student_rows %}
+
+                    <tr>
+
+                        <td>
+                            {{ row.student.student_id }}
+                        </td>
+
+
+                        <td>
+
+                            {{ row.student.user.get_full_name|default:row.student.user.username }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ row.student.department.code }}
+
+                        </td>
+
+
+                        <td>
+
+
+                            {% if row.status == "PRESENT" %}
+
+                                <span class="status-badge status-present">
+
+                                    Present
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-badge status-absent">
+
+                                    Absent
+
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- EDIT -->
+
+        <div style="
+            margin-top: 20px;
+            text-align: right;
+        ">
+
+            <a
+                href="?year={{ selected_subject.year }}&semester={{ selected_subject.semester }}&subject={{ selected_subject.id }}&date={{ selected_date }}&edit=1"
+                class="btn btn-primary"
+            >
+
+                Edit Attendance
+
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+
+    <!-- =================================
+         EDIT / NEW ATTENDANCE MODE
+    ================================= -->
+
+    <form method="post">
+
+        {% csrf_token %}
+
+
+        <input
+            type="hidden"
+            name="year"
+            value="{{ selected_subject.year }}"
+        >
+
+
+        <input
+            type="hidden"
+            name="semester"
+            value="{{ selected_subject.semester }}"
+        >
+
+
+        <input
+            type="hidden"
+            name="subject"
+            value="{{ selected_subject.id }}"
+        >
+
+
+        <input
+            type="hidden"
+            name="date"
+            value="{{ selected_date }}"
+        >
+
+
+        <div class="table-container">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Student ID</th>
+
+                        <th>Student Name</th>
+
+                        <th>Department</th>
+
+                        <th>Attendance</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for row in student_rows %}
+
+                    <tr>
+
+
+                        <td>
+
+                            {{ row.student.student_id }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ row.student.user.get_full_name|default:row.student.user.username }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ row.student.department.code }}
+
+                        </td>
+
+
+                        <td>
+
+
+                            <label
+                                style="
+                                    margin-right: 20px;
+                                    cursor: pointer;
+                                "
+                            >
+
+                                <input
+                                    type="radio"
+                                    name="status_{{ row.student.id }}"
+                                    value="PRESENT"
+
+                                    {% if row.status == "PRESENT" %}
+                                        checked
+                                    {% endif %}
+
+                                    required
+                                >
+
+                                Present
+
+                            </label>
+
+
+                            <label
+                                style="cursor: pointer;"
+                            >
+
+                                <input
+                                    type="radio"
+                                    name="status_{{ row.student.id }}"
+                                    value="ABSENT"
+
+                                    {% if row.status == "ABSENT" %}
+                                        checked
+                                    {% endif %}
+                                >
+
+                                Absent
+
+                            </label>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            style="text-align:center;"
+                        >
+
+                            No students found
+                            for this year and department.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% if student_rows %}
+
+        <div style="
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        ">
+
+            <button
+                type="submit"
+                class="btn btn-success"
+            >
+
+                {% if edit_mode %}
+
+                    Save Changes
+
+                {% else %}
+
+                    Save Attendance
+
+                {% endif %}
+
+            </button>
+
+        </div>
+
+        {% endif %}
+
+
+    </form>
+
+
+    {% endif %}
+
+</div>
+
+
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,823 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Attendance
+{% endblock %}
+
+{% block page_heading %}
+My Attendance
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .attendance-page {
+        width: 100%;
+        max-width: 1250px;
+        margin: 0 auto;
+    }
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .attendance-header {
+        margin-bottom: 24px;
+    }
+
+    .attendance-header h1 {
+        margin: 0;
+        font-size: 28px;
+        color: #0f172a;
+    }
+
+    .attendance-header p {
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+
+    /* =====================================================
+       FILTER CARD
+    ===================================================== */
+
+    .attendance-filter-card {
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 12px;
+
+        padding: 24px;
+
+        margin-bottom: 22px;
+
+        box-shadow:
+            0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .attendance-filter-card h2 {
+        margin: 0 0 18px;
+
+        font-size: 18px;
+
+        color: #0f172a;
+    }
+
+    .attendance-filter-form {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr auto;
+
+        gap: 16px;
+
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-group label {
+        margin-bottom: 7px;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        color: #334155;
+    }
+
+    .filter-group select {
+        width: 100%;
+
+        height: 44px;
+
+        padding: 0 12px;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 7px;
+
+        background: #ffffff;
+
+        color: #1f2937;
+
+        font-size: 14px;
+
+        outline: none;
+    }
+
+    .filter-group select:focus {
+        border-color: #2563eb;
+
+        box-shadow:
+            0 0 0 3px rgba(
+                37,
+                99,
+                235,
+                0.10
+            );
+    }
+
+    .view-btn {
+        height: 44px;
+
+        padding: 0 20px;
+
+        border: none;
+
+        border-radius: 7px;
+
+        background: #2563eb;
+
+        color: #ffffff;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        cursor: pointer;
+    }
+
+    .view-btn:hover {
+        background: #1d4ed8;
+    }
+
+
+    /* =====================================================
+       MONTH HEADING
+    ===================================================== */
+
+    .month-heading {
+        margin-bottom: 18px;
+    }
+
+    .month-heading h2 {
+        margin: 0;
+
+        font-size: 20px;
+
+        color: #0f172a;
+    }
+
+    .month-heading p {
+        margin-top: 5px;
+
+        color: #64748b;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================================================
+       SUMMARY CARDS
+    ===================================================== */
+
+    .attendance-summary {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap: 16px;
+
+        margin-bottom: 22px;
+    }
+
+    .attendance-summary-card {
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 10px;
+
+        padding: 18px;
+
+        box-shadow:
+            0 4px 12px rgba(
+                15,
+                23,
+                42,
+                0.04
+            );
+    }
+
+    .attendance-summary-card p {
+        margin: 0 0 7px;
+
+        color: #64748b;
+
+        font-size: 12px;
+    }
+
+    .attendance-summary-card h3 {
+        margin: 0;
+
+        font-size: 25px;
+
+        color: #0f172a;
+    }
+
+    .percentage-card {
+        border-top: 3px solid #2563eb;
+    }
+
+    .percentage-value {
+        color: #2563eb !important;
+    }
+
+
+    /* =====================================================
+       DAILY TABLE
+    ===================================================== */
+
+    .attendance-table-card {
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 12px;
+
+        padding: 24px;
+
+        box-shadow:
+            0 4px 12px rgba(
+                15,
+                23,
+                42,
+                0.04
+            );
+    }
+
+    .attendance-table-header {
+        margin-bottom: 18px;
+    }
+
+    .attendance-table-header h2 {
+        margin: 0;
+
+        font-size: 19px;
+
+        color: #0f172a;
+    }
+
+    .attendance-table-header p {
+        margin-top: 5px;
+
+        font-size: 13px;
+
+        color: #64748b;
+    }
+
+    .attendance-table-wrapper {
+        width: 100%;
+
+        overflow-x: auto;
+    }
+
+    .attendance-table {
+        width: 100%;
+
+        border-collapse: collapse;
+
+        min-width: 750px;
+    }
+
+    .attendance-table th {
+        padding: 13px 14px;
+
+        background: #f8fafc;
+
+        border-bottom: 1px solid #e5e7eb;
+
+        color: #475569;
+
+        font-size: 12px;
+
+        font-weight: 600;
+
+        text-align: left;
+
+        white-space: nowrap;
+    }
+
+    .attendance-table td {
+        padding: 13px 14px;
+
+        border-bottom: 1px solid #edf1f5;
+
+        color: #334155;
+
+        font-size: 13px;
+
+        vertical-align: middle;
+    }
+
+    .attendance-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .present-count {
+        color: #15803d;
+
+        font-weight: 700;
+    }
+
+    .absent-count {
+        color: #dc2626;
+
+        font-weight: 700;
+    }
+
+    .total-count {
+        color: #334155;
+
+        font-weight: 700;
+    }
+
+    .day-percentage {
+        font-weight: 700;
+    }
+
+    .good-percentage {
+        color: #15803d;
+    }
+
+    .warning-percentage {
+        color: #d97706;
+    }
+
+    .poor-percentage {
+        color: #dc2626;
+    }
+
+    .no-class {
+        color: #94a3b8;
+
+        font-style: italic;
+    }
+
+
+    /* =====================================================
+       EMPTY STATE
+    ===================================================== */
+
+    .attendance-empty {
+        text-align: center;
+
+        padding: 50px 20px;
+
+        color: #64748b;
+    }
+
+    .attendance-empty-icon {
+        font-size: 32px;
+
+        margin-bottom: 10px;
+    }
+
+    .attendance-empty h3 {
+        margin: 0 0 6px;
+
+        color: #334155;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 900px) {
+
+        .attendance-summary {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+        .attendance-filter-form {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .view-btn {
+            width: 100%;
+        }
+    }
+
+
+    @media (max-width: 600px) {
+
+        .attendance-summary {
+            grid-template-columns: 1fr;
+        }
+
+        .attendance-filter-form {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+</style>
+
+
+<div class="attendance-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <div class="attendance-header">
+
+        <h1>
+            My Attendance
+        </h1>
+
+        <p>
+            View your day-wise attendance and monthly percentage.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTER
+    ===================================================== -->
+
+    <div class="attendance-filter-card">
+
+        <h2>
+            Select Month
+        </h2>
+
+        <form
+            method="GET"
+            class="attendance-filter-form"
+        >
+
+
+            <!-- YEAR -->
+
+            <div class="filter-group">
+
+                <label for="year">
+                    Year
+                </label>
+
+                <select
+                    id="year"
+                    name="year"
+                >
+
+                    {% for year in years %}
+
+                        <option
+                            value="{{ year }}"
+                            {% if selected_year == year %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ year }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- MONTH -->
+
+            <div class="filter-group">
+
+                <label for="month">
+                    Month
+                </label>
+
+                <select
+                    id="month"
+                    name="month"
+                >
+
+                    {% for month in months %}
+
+                        <option
+                            value="{{ month.number }}"
+                            {% if selected_month == month.number %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ month.name }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="view-btn"
+            >
+                View Attendance
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         MONTH TITLE
+    ===================================================== -->
+
+    <div class="month-heading">
+
+        <h2>
+            {{ month_name }} {{ selected_year }}
+        </h2>
+
+        <p>
+            Day-wise attendance report
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ===================================================== -->
+
+    <div class="attendance-summary">
+
+
+        <!-- PRESENT -->
+
+        <div class="attendance-summary-card">
+
+            <p>
+                Present Classes
+            </p>
+
+            <h3 class="present-count">
+                {{ total_present }}
+            </h3>
+
+        </div>
+
+
+        <!-- ABSENT -->
+
+        <div class="attendance-summary-card">
+
+            <p>
+                Absent Classes
+            </p>
+
+            <h3 class="absent-count">
+                {{ total_absent }}
+            </h3>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="attendance-summary-card">
+
+            <p>
+                Total Classes
+            </p>
+
+            <h3 class="total-count">
+                {{ total_classes }}
+            </h3>
+
+        </div>
+
+
+        <!-- PERCENTAGE -->
+
+        <div class="attendance-summary-card percentage-card">
+
+            <p>
+                Monthly Attendance
+            </p>
+
+            <h3 class="percentage-value">
+                {{ monthly_percentage }}%
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DAILY TABLE
+    ===================================================== -->
+
+    <div class="attendance-table-card">
+
+        <div class="attendance-table-header">
+
+            <h2>
+                Daily Attendance
+            </h2>
+
+            <p>
+                Present and absent classes for each day.
+            </p>
+
+        </div>
+
+
+        {% if daily_rows %}
+
+        <div class="attendance-table-wrapper">
+
+            <table class="attendance-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Day
+                        </th>
+
+                        <th>
+                            Present
+                        </th>
+
+                        <th>
+                            Absent
+                        </th>
+
+                        <th>
+                            Total Classes
+                        </th>
+
+                        <th>
+                            Percentage
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for row in daily_rows %}
+
+                    <tr>
+
+
+                        <!-- DATE -->
+
+                        <td>
+                            {{ row.date|date:"d M Y" }}
+                        </td>
+
+
+                        <!-- DAY -->
+
+                        <td>
+                            {{ row.day_name }}
+                        </td>
+
+
+                        {% if row.has_class %}
+
+
+                            <!-- PRESENT -->
+
+                            <td>
+
+                                <span class="present-count">
+                                    {{ row.present }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- ABSENT -->
+
+                            <td>
+
+                                <span class="absent-count">
+                                    {{ row.absent }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- TOTAL -->
+
+                            <td>
+
+                                <span class="total-count">
+                                    {{ row.total }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- PERCENTAGE -->
+
+                            <td>
+
+                                {% if row.percentage >= 75 %}
+
+                                    <span class="day-percentage good-percentage">
+                                        {{ row.percentage }}%
+                                    </span>
+
+                                {% elif row.percentage >= 65 %}
+
+                                    <span class="day-percentage warning-percentage">
+                                        {{ row.percentage }}%
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="day-percentage poor-percentage">
+                                        {{ row.percentage }}%
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                        {% else %}
+
+                            <td
+                                colspan="4"
+                                class="no-class"
+                            >
+                                No attendance / no classes
+                            </td>
+
+                        {% endif %}
+
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="attendance-empty">
+
+            <div class="attendance-empty-icon">
+                📊
+            </div>
+
+            <h3>
+                No Attendance Records
+            </h3>
+
+            <p>
+                No attendance has been recorded for this month.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

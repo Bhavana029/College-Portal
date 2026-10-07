@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    Faculty Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1> Dashboard</h1>
+
+        <p>
+            Welcome,
+            {{ request.user.get_full_name|default:request.user.username }}
+
+        </p>
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     STATISTICS CARDS
+========================================= -->
+
+<div class="dashboard-grid">
+
+    <!-- My Subjects -->
+
+    <div class="dashboard-card">
+
+        <h4>My Subjects</h4>
+
+        <div class="card-value">
+            {{ total_subjects }}
+        </div>
+
+        <div class="card-description">
+            Assigned subjects
+        </div>
+
+    </div>
+
+
+    <!-- Department Students -->
+
+    <div class="dashboard-card">
+
+        <h4>Department Students</h4>
+
+        <div class="card-value">
+            {{ total_students }}
+        </div>
+
+        <div class="card-description">
+            Students in my department
+        </div>
+
+    </div>
+
+
+    <!-- Attendance Records -->
+
+    <div class="dashboard-card">
+
+        <h4>Attendance Records</h4>
+
+        <div class="card-value">
+            {{ total_attendance }}
+        </div>
+
+        <div class="card-description">
+            Attendance marked by me
+        </div>
+
+    </div>
+
+
+    <!-- Today's Attendance -->
+
+    <div class="dashboard-card">
+
+        <h4>Today's Attendance</h4>
+
+        <div class="card-value">
+            {{ today_attendance }}
+        </div>
+
+        <div class="card-description">
+            Records marked today
+        </div>
+
+    </div>
+
+
+    <!-- Marks Entered -->
+
+    <div class="dashboard-card">
+
+        <h4>Marks Entered</h4>
+
+        <div class="card-value">
+            {{ total_marks }}
+        </div>
+
+        <div class="card-description">
+            Marks entered by me
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     FACULTY INFORMATION
+========================================= -->
+
+<div class="content-card">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>Faculty Information</h2>
+
+            <p>
+                Your faculty profile
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table class="data-table">
+
+            <tbody>
+
+                <!-- Faculty ID -->
+
+                <tr>
+
+                    <th>
+                        Faculty ID
+                    </th>
+
+                    <td>
+                        {{ faculty.faculty_id }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Name -->
+
+                <tr>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <td>
+                        {{ faculty.user.get_full_name|default:faculty.user.username }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Email -->
+
+                <tr>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <td>
+                        {{ faculty.user.email|default:"Not specified" }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Department -->
+
+                <tr>
+
+                    <th>
+                        Department
+                    </th>
+
+                    <td>
+                        {{ faculty.department.name }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Department Code -->
+
+                <tr>
+
+                    <th>
+                        Department Code
+                    </th>
+
+                    <td>
+                        {{ faculty.department.code }}
+                    </td>
+
+                </tr>
+
+
+                <!-- Designation -->
+
+                <tr>
+
+                    <th>
+                        Designation
+                    </th>
+
+                    <td>
+                        {{ faculty.designation|default:"Not specified" }}
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

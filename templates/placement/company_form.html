@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Add Company{% endblock %}
+
+{% block content %}
+
+<div class="company-form-page">
+
+    <!-- Page Header -->
+    <div class="company-page-header">
+        <div>
+            <div class="breadcrumb">
+                Placement Cell <span>/</span> Companies <span>/</span> Add Company
+            </div>
+
+            <h1>Add Company</h1>
+            <p>Add a company and HR contact details for placement activities.</p>
+        </div>
+
+        <a href="{% url 'placement-companies' %}" class="back-btn">
+            <span>←</span>
+            Back to Companies
+        </a>
+    </div>
+
+
+    <!-- Form Card -->
+    <div class="company-form-card">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <!-- Company Information -->
+            <div class="form-section">
+
+                <div class="form-section-heading">
+                    <div class="section-icon company-icon">
+                        🏢
+                    </div>
+
+                    <div>
+                        <h2>Company Information</h2>
+                        <p>Enter the basic company details</p>
+                    </div>
+                </div>
+
+
+                <div class="company-form-grid">
+
+                    <!-- Company Name -->
+                    <div class="form-field full-width">
+                        <label for="company_name">
+                            Company Name
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="company_name"
+                            name="company_name"
+                            placeholder="Enter company name"
+                            required
+                        >
+
+                        <small>
+                            Example: TCS, Infosys, Wipro
+                        </small>
+                    </div>
+
+
+                    <!-- Industry -->
+                    <div class="form-field">
+                        <label for="industry">
+                            Industry
+                        </label>
+
+                        <input
+                            type="text"
+                            id="industry"
+                            name="industry"
+                            placeholder="Enter industry"
+                        >
+
+                        <small>
+                            Example: IT Services, Finance
+                        </small>
+                    </div>
+
+
+                    <!-- Website -->
+                    <div class="form-field">
+                        <label for="website">
+                            Company Website
+                        </label>
+
+                        <div class="input-with-icon">
+                            <span>🌐</span>
+
+                            <input
+                                type="url"
+                                id="website"
+                                name="website"
+                                placeholder="https://www.company.com"
+                            >
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HR Information -->
+            <div class="form-section">
+
+                <div class="form-section-heading">
+                    <div class="section-icon hr-icon">
+                        👤
+                    </div>
+
+                    <div>
+                        <h2>HR Contact Information</h2>
+                        <p>Enter the company's HR contact details</p>
+                    </div>
+                </div>
+
+
+                <div class="company-form-grid">
+
+                    <!-- HR Name -->
+                    <div class="form-field">
+                        <label for="hr_name">
+                            HR Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="hr_name"
+                            name="hr_name"
+                            placeholder="Enter HR name"
+                        >
+                    </div>
+
+
+                    <!-- HR Email -->
+                    <div class="form-field">
+                        <label for="hr_email">
+                            HR Email
+                        </label>
+
+                        <div class="input-with-icon">
+                            <span>✉</span>
+
+                            <input
+                                type="email"
+                                id="hr_email"
+                                name="hr_email"
+                                placeholder="hr@company.com"
+                            >
+                        </div>
+                    </div>
+
+
+                    <!-- HR Phone -->
+                    <div class="form-field">
+                        <label for="hr_phone">
+                            HR Phone
+                        </label>
+
+                        <div class="input-with-icon">
+                            <span>📞</span>
+
+                            <input
+                                type="tel"
+                                id="hr_phone"
+                                name="hr_phone"
+                                placeholder="Enter phone number"
+                                maxlength="15"
+                            >
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Bottom Actions -->
+            <div class="company-form-footer">
+
+                <a
+                    href="{% url 'placement-companies' %}"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="save-company-btn"
+                >
+                    <span>✓</span>
+                    Save Company
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
